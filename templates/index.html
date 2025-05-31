@@ -1,0 +1,18 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam Detector</title>
+</head>
+<body>
+    <h2>Multilingual Spam Detection</h2>
+    <form action="/predict" method="post">
+        <textarea name="message" rows="6" cols="50" placeholder="Enter message"></textarea><br><br>
+        <input type="submit" value="Detect Spam">
+    </form>
+
+    {% if prediction_text %}
+        <h3>{{ prediction_text }}</h3>
+    {% endif %}
+</body>
+</html>
