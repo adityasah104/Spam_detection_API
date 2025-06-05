@@ -1,4 +1,7 @@
-﻿absl-py==2.1.0
+--upgrade
+pip>=24.0
+setuptools>=65.0 
+absl-py==2.1.0
 anyio==4.8.0
 argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
