@@ -1,5 +1,7 @@
-buildCommand: |
-  export CARGO_HOME=/tmp/cargo
-  export RUSTUP_HOME=/tmp/rustup
-  pip install --upgrade pip setuptools wheel
-  pip install -r requirements.txt
+services:
+  - type: web
+    name: my-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    plan: free
