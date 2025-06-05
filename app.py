@@ -3,6 +3,7 @@ from flask import Flask, request, render_template
 from joblib import load
 from feature_extraction import SMSFeatureExtractor
 from flask import jsonify
+import os
 
 app = Flask(__name__)
 model = load('spam_model.joblib')
@@ -32,5 +33,8 @@ def api_predict():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-if __name__ == '__main__':
-     app.run(debug=True)
+# if __name__ == '__main__':
+#      app.run(debug=True)   /// Changed for Render hosting, For local host keep 36 and 37 line and remove/comment 38,39,40 lines
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
