@@ -1,0 +1,5 @@
+version : "1.1"
+services :
+  web :
+     image : adityasah712/spam-app:latest
+         - "8000:8000"
