@@ -1,5 +1,11 @@
-version : "1.1"
-services :
-  web :
-     image : adityasah712/spam-app:latest
-         - "8000:8000"
+version: '3.8'
+
+services:
+  spam-app:
+    image: adityasah712/spam-app:latest
+    container_name: spam-detection-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    restart: unless-stopped
