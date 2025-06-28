@@ -100,18 +100,29 @@
         </form>
 
         {% if prediction_text %}
-            {% if 'spam' in prediction_text.lower() and 'not' not in prediction_text.lower() %}
+            {% if prediction_type == 'spam' %}
                 <div class="result spam">
                     🚨 {{ prediction_text }}
+                </div>
+            {% elif prediction_type == 'ham' %}
+                <div class="result ham">
+                    ✅ {{ prediction_text }}
                 </div>
             {% elif 'error' in prediction_text.lower() %}
                 <div class="result error">
                     ⚠️ {{ prediction_text }}
                 </div>
             {% else %}
-                <div class="result ham">
-                    ✅ {{ prediction_text }}
-                </div>
+                <!-- Fallback for when prediction_type is not passed -->
+                {% if 'spam' in prediction_text.lower() and 'not' not in prediction_text.lower() %}
+                    <div class="result spam">
+                        🚨 {{ prediction_text }}
+                    </div>
+                {% else %}
+                    <div class="result ham">
+                        ✅ {{ prediction_text }}
+                    </div>
+                {% endif %}
             {% endif %}
         {% endif %}
 

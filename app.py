@@ -141,20 +141,28 @@ def predict_simple_web():
         features = extractor.extract_features(message)
         raw_prediction = model.predict(features)[0]
         
+        # Log for debugging
+        logger.info(f"Web form - Raw prediction: {raw_prediction}, Message: {message[:50]}...")
+        
         # Normalize prediction
         result, prediction_code = normalize_prediction(raw_prediction)
+        
+        # Log normalized result
+        logger.info(f"Web form - Normalized result: {result}, code: {prediction_code}")
         
         # Convert to display format
         display_result = "Spam" if result == "spam" else "Not Spam"
         
         return render_template('index.html', 
-                             prediction_text=f"{display_result}",
-                             message=message)
+                             prediction_text=display_result,
+                             message=message,
+                             prediction_type=result)  # Pass the result type for styling
     
     except Exception as e:
         logger.error(f"Error in simple web prediction: {str(e)}")
         return render_template('index.html', 
-                             prediction_text=f"Error: {str(e)}")
+                             prediction_text=f"Error: {str(e)}",
+                             message=message if 'message' in locals() else "")
 
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
@@ -272,6 +280,50 @@ def api_predict_simple():
     except Exception as e:
         logger.error(f"Error in simple prediction: {str(e)}")
         return jsonify({'error': 'Prediction failed'}), 500
+
+@app.route('/debug_predict', methods=['POST'])
+def debug_predict():
+    """Debug prediction route to see raw model output"""
+    try:
+        data = request.get_json()
+        if not data or 'message' not in data:
+            return jsonify({'error': 'Missing message'}), 400
+        
+        message = data['message'].strip()
+        if not message:
+            return jsonify({'error': 'Empty message'}), 400
+        
+        # Extract features and make prediction
+        features = extractor.extract_features(message)
+        raw_prediction = model.predict(features)[0]
+        
+        # Get all possible info
+        debug_info = {
+            'raw_prediction': str(raw_prediction),
+            'raw_prediction_type': str(type(raw_prediction)),
+            'message': message
+        }
+        
+        # Try to get model classes
+        if hasattr(model, 'classes_'):
+            debug_info['model_classes'] = [str(c) for c in model.classes_]
+        
+        # Try to get probabilities
+        try:
+            probabilities = model.predict_proba(features)[0]
+            debug_info['probabilities'] = [float(p) for p in probabilities]
+        except:
+            debug_info['probabilities'] = 'Not available'
+        
+        # Normalize prediction
+        result, prediction_code = normalize_prediction(raw_prediction)
+        debug_info['normalized_result'] = result
+        debug_info['prediction_code'] = prediction_code
+        
+        return jsonify(debug_info)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/model_info', methods=['GET'])
 def model_info():
