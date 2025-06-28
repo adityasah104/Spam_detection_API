@@ -1,5 +1,5 @@
 # Multi-stage build for smaller final image
-FROM python:3.11.0 as builder
+FROM python:3.11.0 AS builder
 
 WORKDIR /app
 
