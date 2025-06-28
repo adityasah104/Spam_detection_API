@@ -1,309 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spam Detector</title>
-
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            width: 100%;
+            font-family: Arial, sans-serif;
             max-width: 600px;
-            animation: slideUp 0.6s ease-out;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        .header {
+        h2 {
+            color: #333;
             text-align: center;
             margin-bottom: 30px;
         }
-
-        .header h1 {
-            color: #2d3748;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .header .icon {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .subtitle {
-            color: #718096;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .form-container {
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .input-label {
-            display: block;
-            color: #4a5568;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
         textarea {
             width: 100%;
-            padding: 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
             font-size: 16px;
             font-family: inherit;
             resize: vertical;
-            min-height: 120px;
-            transition: all 0.3s ease;
-            background: #f8fafc;
+            box-sizing: border-box;
         }
-
         textarea:focus {
+            border-color: #4CAF50;
             outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
         }
-
-        textarea::placeholder {
-            color: #a0aec0;
-        }
-
         .submit-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #4CAF50;
             color: white;
+            padding: 12px 30px;
             border: none;
-            padding: 18px 30px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            font-size: 16px;
+            margin-top: 15px;
+            width: 100%;
         }
-
         .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+            background-color: #45a049;
         }
-
-        .submit-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .result-container {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .result-spam {
-            background: linear-gradient(135deg, #fc8181, #e53e3e);
-            color: white;
-            border: 2px solid #e53e3e;
-        }
-
-        .result-legitimate {
-            background: linear-gradient(135deg, #68d391, #38a169);
-            color: white;
-            border: 2px solid #38a169;
-        }
-
-        .result-text {
-            font-size: 1.3rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .result-icon {
-            font-size: 1.5rem;
-        }
-
-        .features {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-
-        .feature {
-            text-align: center;
+        .result {
+            margin-top: 20px;
             padding: 15px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 10px;
-            color: #4a5568;
-            font-size: 1.5rem;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
         }
-
-        .feature-text {
-            font-size: 0.9rem;
-            font-weight: 600;
+        .spam {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 2px solid #e57373;
         }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 25px;
-                margin: 10px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-            }
+        .ham {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #81c784;
+        }
+        .error {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 2px solid #ffb74d;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>
-                <div class="icon">
-                    🛡️
-                </div>
-                Spam Detector
-            </h1>
-            <div class="subtitle">Multilingual Spam Detection</div>
-        </div>
-
-        <form action="/predict" method="post" class="form-container">
-            <div class="input-group">
-                <label class="input-label">
-                    📧 Message Content
-                </label>
-                <textarea name="message" placeholder="Enter your message here to check if it's spam or legitimate..." required></textarea>
+        <h2>🛡️ Multilingual Spam Detection</h2>
+        <form action="/predict_simple" method="post">
+            <div class="form-group">
+                <label for="message">Enter message to analyze:</label>
+                <textarea 
+                    id="message" 
+                    name="message" 
+                    rows="6" 
+                    placeholder="Enter your SMS message here... (supports multiple languages)"
+                    required>{{ message or '' }}</textarea>
             </div>
-            
-            <button type="submit" class="submit-btn">
-                🔍 Detect Spam
-            </button>
+            <input type="submit" value="🔍 Detect Spam" class="submit-btn">
         </form>
 
         {% if prediction_text %}
-            {% if 'spam' in prediction_text.lower() or 'SPAM' in prediction_text %}
-                <div class="result-container result-spam">
-                    <div class="result-text">
-                        <span class="result-icon">⚠️</span>
-                        <span>{{ prediction_text }}</span>
-                    </div>
+            {% if 'spam' in prediction_text.lower() and 'not' not in prediction_text.lower() %}
+                <div class="result spam">
+                    🚨 {{ prediction_text }}
+                </div>
+            {% elif 'error' in prediction_text.lower() %}
+                <div class="result error">
+                    ⚠️ {{ prediction_text }}
                 </div>
             {% else %}
-                <div class="result-container result-legitimate">
-                    <div class="result-text">
-                        <span class="result-icon">✅</span>
-                        <span>{{ prediction_text }}</span>
-                    </div>
+                <div class="result ham">
+                    ✅ {{ prediction_text }}
                 </div>
             {% endif %}
         {% endif %}
 
-        <div class="features">
-            <div class="feature">
-                🌍
-                <div class="feature-text">Multilingual</div>
-            </div>
-            <div class="feature">
-                ⚡
-                <div class="feature-text">Fast Detection</div>
-            </div>
-            <div class="feature">
-                🧠
-                <div class="feature-text">AI Powered</div>
-            </div>
-            <div class="feature">
-                🔒
-                <div class="feature-text">Secure</div>
-            </div>
+        <div style="margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+            <h4>💡 Tips:</h4>
+            <ul style="margin: 10px 0; color: #666;">
+                <li>Works with English, Bengali, Hindi, Spanish, and many other languages</li>
+                <li>Paste promotional messages, suspicious texts, or normal messages to test</li>
+                <li>The detector analyzes content patterns to identify potential spam</li>
+            </ul>
         </div>
     </div>
-
-    <script>
-        // Add some interactive animations
-        document.querySelector('textarea').addEventListener('focus', function() {
-            this.parentElement.style.transform = 'scale(1.02)';
-        });
-
-        document.querySelector('textarea').addEventListener('blur', function() {
-            this.parentElement.style.transform = 'scale(1)';
-        });
-
-        // Form submission animation
-        document.querySelector('form').addEventListener('submit', function() {
-            const btn = document.querySelector('.submit-btn');
-            btn.innerHTML = '⏳ Analyzing...';
-            btn.style.opacity = '0.8';
-        });
-    </script>
 </body>
 </html>
